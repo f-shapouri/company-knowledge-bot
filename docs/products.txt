@@ -1,0 +1,18 @@
+Products - TechVision Company
+
+Product 1: TechVision ERP
+- Enterprise resource planning software for medium and large businesses.
+- Features: accounting, HR management, inventory, and reporting.
+- Price: starts from $500/month.
+
+Product 2: TechVision CRM
+- Customer relationship management system.
+- Features: lead tracking, sales pipeline, customer support integration.
+- Price: starts from $200/month.
+
+Product 3: TechVision Analytics
+- Business intelligence and data analytics platform.
+- Features: real-time dashboards, custom reports, data export.
+- Price: starts from $300/month.
+
+For demo requests, contact sales@techvision.com

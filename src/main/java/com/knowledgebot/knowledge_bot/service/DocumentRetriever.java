@@ -35,7 +35,7 @@ public class DocumentRetriever {
                     var matchScore = 0;
 
                     for (String keyword : keywords) {
-                        if (keyword.length() < 4) {
+                        if (keyword.length() < 3) {
                             continue;
                         }
                         if (line.contains(keyword)) {

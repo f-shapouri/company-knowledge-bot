@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Company Knowledge Bot</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 50px auto; padding: 20px; }
+    select, input, button { padding: 10px; font-size: 16px; margin: 5px; }
+    input { width: 60%; }
+    button { background: #007bff; color: white; border: none; cursor: pointer; }
+    #answer { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+<h1>📚 Company Knowledge Bot</h1>
+
+<div>
+  <select id="version">
+    <option value="api">V1 - Keyword Search (No AI)</option>
+    <option value="api-ai">V2 - OpenAI (AI Powered)</option>
+  </select>
+  <br><br>
+  <input type="text" id="question" placeholder="Ask about company, leave policy, products...">
+  <button onclick="ask()">Ask</button>
+</div>
+<div id="answer"></div>
+
+<script>
+  async function ask() {
+    const question = document.getElementById('question').value;
+    const version = document.getElementById('version').value;
+
+    if (!question) {
+      alert('Please enter a question');
+      return;
+    }
+
+    document.getElementById('answer').innerHTML = '🤔 Thinking...';
+
+    try {
+      const response = await fetch(`/${version}/ask?question=${encodeURIComponent(question)}`);
+      const data = await response.json();
+      document.getElementById('answer').innerHTML = `<strong>Answer:</strong><br>${data.answer}`;
+    } catch (error) {
+      document.getElementById('answer').innerHTML = `❌ Error: ${error.message}`;
+    }
+  }
+
+  document.getElementById('question').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') ask();
+  });
+</script>
+</body>
+</html>

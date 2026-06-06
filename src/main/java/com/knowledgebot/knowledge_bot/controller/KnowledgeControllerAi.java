@@ -14,16 +14,16 @@ import java.util.Map;
 public class KnowledgeControllerAi {
     private final RagService ragService;
 
-    public KnowledgeControllerAi(RagService ragService){
+    public KnowledgeControllerAi(RagService ragService) {
         this.ragService = ragService;
     }
 
     @GetMapping("/ask")
-    public Map<String,String> ask(@RequestParam String question){
+    public Map<String, String> ask(@RequestParam String question) {
         var answer = ragService.ask(question);
-        var response = new HashMap<String,String>();
-        response.put("question",question);
-        response.put("answer",answer);
+        var response = new HashMap<String, String>();
+        response.put("question", question);
+        response.put("answer", answer);
         return response;
     }
 }

@@ -25,30 +25,34 @@ public class DocumentRetriever {
                 return results;
             }
 
-            var normalizedQuestion = question.toLowerCase();
-            var keywords = normalizedQuestion.split("\\s+");
+            var keywords = question.toLowerCase().split("\\s+");
+            int bestScore = 0;
+            List<String> bestLines = null;
 
             for (File file : files) {
                 var lines = Files.readAllLines(file.toPath());
                 for (int i = 0; i < lines.size(); i++) {
                     var line = lines.get(i).toLowerCase();
-                    var matchScore = 0;
+                    var score = 0;
 
                     for (String keyword : keywords) {
                         if (keyword.length() < 3) {
                             continue;
                         }
-                        if (line.contains(keyword)) {
-                            matchScore++;
-                        }
+                        if (line.contains(keyword)) score++;
                     }
-                    if (matchScore > 0) {
+                    if (score > bestScore) {
+                        bestScore = score;
+                        var candidate = new ArrayList<String>();
                         for (int j = i; j < Math.min(i + 4, lines.size()); j++) {
-                            results.add(lines.get(j));
+                            candidate.add(lines.get(j));
                         }
-                        return results;
+                        bestLines = candidate;
                     }
                 }
+            }
+            if (bestScore > 0 && bestLines != null) {
+                return bestLines;
             }
             results.add("No relevant information found.");
         } catch (Exception e) {

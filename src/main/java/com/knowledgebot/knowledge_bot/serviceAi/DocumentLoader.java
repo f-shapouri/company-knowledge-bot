@@ -12,7 +12,6 @@ public class DocumentLoader {
     private static final String DOCS_PATH = "docs/";
 
     public String getRelevantContext(String question) {
-        StringBuilder context = new StringBuilder();
         String[] keywords = question.toLowerCase().split("\\s+");
 
         try {
@@ -21,32 +20,34 @@ public class DocumentLoader {
                     name.endsWith(".txt") || name.endsWith(".md"));
 
             if (files == null || files.length == 0) {
-                return "No documents found in /docs folder.";
+                return "No documents found.";
             }
+
+            int bestScore = 0;
+            StringBuilder bestContext = new StringBuilder();
 
             for (File file : files) {
                 List<String> lines = Files.readAllLines(file.toPath());
-                context.append("\n--- ").append(file.getName()).append(" ---\n");
-
-                for (String line : lines) {
-                    String lowerLine = line.toLowerCase();
-                    boolean isRelevant = false;
-
+                for (int i = 0; i < lines.size(); i++) {
+                    String line = lines.get(i).toLowerCase();
+                    int score = 0;
                     for (String keyword : keywords) {
-                        if (keyword.length() > 2 && lowerLine.contains(keyword)) {
-                            isRelevant = true;
-                            break;
+                        if (keyword.length() >= 3 && line.contains(keyword)) {
+                            score++;
                         }
                     }
-
-                    if (isRelevant || context.length() < 500) {
-                        context.append(line).append("\n");
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestContext = new StringBuilder();
+                        bestContext.append("--- ").append(file.getName()).append(" ---\n");
+                        for (int j = Math.max(0, i - 1); j < Math.min(i + 6, lines.size()); j++) {
+                            bestContext.append(lines.get(j)).append("\n");
+                        }
                     }
                 }
             }
 
-            return context.length() > 2000 ?
-                    context.substring(0, 2000) : context.toString();
+            return bestScore > 0 ? bestContext.toString() : "No relevant information found.";
 
         } catch (Exception e) {
             return "Error reading documents: " + e.getMessage();
